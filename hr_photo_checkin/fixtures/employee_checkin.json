@@ -1,0 +1,25 @@
+[
+ {
+  "attendance": null,
+  "device_id": null,
+  "docstatus": 0,
+  "doctype": "Employee Checkin",
+  "employee": "HR-EMP-00001",
+  "employee_name": "Ahmed Hamdy",
+  "geolocation": null,
+  "latitude": 0.0,
+  "log_type": "IN",
+  "longitude": 0.0,
+  "modified": "2026-06-02 23:07:40.131418",
+  "name": "EMP-CKIN-06-2026-000001",
+  "offshift": 1,
+  "overtime_type": null,
+  "shift": null,
+  "shift_actual_end": null,
+  "shift_actual_start": null,
+  "shift_end": null,
+  "shift_start": null,
+  "skip_auto_attendance": 0,
+  "time": "2026-06-02 23:06:49"
+ }
+]
