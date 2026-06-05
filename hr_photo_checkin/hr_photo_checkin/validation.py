@@ -1,16 +1,16 @@
-import frappe from frappe import _
-
+import frappe
+from frappe import _
 
 SETTINGS_DOCTYPE = "Hr Photo Checkin Settings"
 
 
-def require_photo(doc , method=None):
+def require_photo(doc, method=None):
     """Validate that a check-in photo is present when the feature is enabled.
     Raises:
         frappe.ValidationError: when the toggle is on and the photo is missing."""
     if not _photo_required():
-        return # feature is off — nothing to validate
-    if not doc.check_in_photo:
+        return  # feature is off — nothing to validate
+    if not doc.custom_check_in_photo:
         frappe.throw(
             msg=_(
                 "A check-in photo is required. Please upload a photo before saving."
@@ -19,7 +19,8 @@ def require_photo(doc , method=None):
             exc=frappe.ValidationError,
             title=_("Photo Required"),
         )
- 
+
+
 def _photo_required() -> bool:
     """Return True when the Hr Photo Checkin Settings toggle is switched on."""
     try:
@@ -30,9 +31,3 @@ def _photo_required() -> bool:
         # Graceful degradation: if the DocType hasn't been migrated yet,
         # treat the feature as disabled rather than crashing every save.
         return False
- 
-
- 
-
-    
-    
