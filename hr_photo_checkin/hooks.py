@@ -44,6 +44,7 @@ doc_events = {
 #                          that belong to another app.)
 # ---------------------------------------------------------------------------
 doctype_js = {
+    "Employee Checkin": "public/js/employee_checkin.js",
     "HR Settings":      "public/js/hr_settings.js",
 }
 doctype_list_js = {
