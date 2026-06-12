@@ -8,251 +8,47 @@ app_license = "mit"
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["hrms"]
 
-# Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "hr_photo_checkin",
-# 		"logo": "/assets/hr_photo_checkin/logo.png",
-# 		"title": "Hr Photo Checkin",
-# 		"route": "/hr_photo_checkin",
-# 		"has_permission": "hr_photo_checkin.api.permission.has_app_permission"
-# 	}
-# ]
+# ---------------------------------------------------------------------------
+# Fixtures
+# Only the Employee Checkin custom field is a fixture.
+# The toggle lives in our own Single DocType (Hr Photo Checkin Settings)
+# which is part of this app — no fixture needed for it.
+# ---------------------------------------------------------------------------
+fixtures = [
+    {
+        "dt": "Custom Field",
+        "filters": [["dt", "=", "Employee Checkin"]]
+    },
+]
 
-# Includes in <head>
-# ------------------
+# ---------------------------------------------------------------------------
+# doc_events — validation hook on Employee Checkin
+# Never touches hrms source;
+# ---------------------------------------------------------------------------
+doc_events = {
+    "Employee Checkin": {
+        "validate": "hr_photo_checkin.hr_photo_checkin.validation.require_photo",
+    }
+}
 
-# include js, css files in header of desk.html
-# app_include_css = "/assets/hr_photo_checkin/css/hr_photo_checkin.css"
-# app_include_js = "/assets/hr_photo_checkin/js/hr_photo_checkin.js"
 
-# include js, css files in header of web template
-# web_include_css = "/assets/hr_photo_checkin/css/hr_photo_checkin.css"
-# web_include_js = "/assets/hr_photo_checkin/js/hr_photo_checkin.js"
-
-# include custom scss in every website theme (without file extension ".scss")
-# website_theme_scss = "hr_photo_checkin/public/scss/website"
-
-# include js, css files in header of web form
-# webform_include_js = {"doctype": "public/js/doctype.js"}
-# webform_include_css = {"doctype": "public/css/doctype.css"}
-
-# include js in page
-# page_js = {"page" : "public/js/file.js"}
-
-# include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
-# doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
-# doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
-
-# Svg Icons
-# ------------------
-# include app icons in desk
-# app_include_icons = "hr_photo_checkin/public/icons.svg"
-
-# Home Pages
-# ----------
-
-# application home page (will override Website Settings)
-# home_page = "login"
-
-# website user home page (by Role)
-# role_home_page = {
-# 	"Role": "home_page"
-# }
-
-# Generators
-# ----------
-
-# automatically create page for each record of this doctype
-# website_generators = ["Web Page"]
-
-# automatically load and sync documents of this doctype from downstream apps
-# importable_doctypes = [doctype_1]
-
-# Jinja
-# ----------
-
-# add methods and filters to jinja environment
-# jinja = {
-# 	"methods": "hr_photo_checkin.utils.jinja_methods",
-# 	"filters": "hr_photo_checkin.utils.jinja_filters"
-# }
-
-# Installation
-# ------------
-
-# before_install = "hr_photo_checkin.install.before_install"
-# after_install = "hr_photo_checkin.install.after_install"
-
-# Uninstallation
-# ------------
-
-# before_uninstall = "hr_photo_checkin.uninstall.before_uninstall"
-# after_uninstall = "hr_photo_checkin.uninstall.after_uninstall"
-
-# Integration Setup
-# ------------------
-# To set up dependencies/integrations with other apps
-# Name of the app being installed is passed as an argument
-
-# before_app_install = "hr_photo_checkin.utils.before_app_install"
-# after_app_install = "hr_photo_checkin.utils.after_app_install"
-
-# Integration Cleanup
-# -------------------
-# To clean up dependencies/integrations with other apps
-# Name of the app being uninstalled is passed as an argument
-
-# before_app_uninstall = "hr_photo_checkin.utils.before_app_uninstall"
-# after_app_uninstall = "hr_photo_checkin.utils.after_app_uninstall"
-
-# Build
-# ------------------
-# To hook into the build process
-
-# after_build = "hr_photo_checkin.build.after_build"
-
-# Desk Notifications
-# ------------------
-# See frappe.core.notifications.get_notification_config
-
-# notification_config = "hr_photo_checkin.notifications.get_notification_config"
-
-# Permissions
-# -----------
-# Permissions evaluated in scripted ways
-
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
-#
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
-
-# Document Events
-# ---------------
-# Hook on document methods and events
-
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
-
-# Scheduled Tasks
-# ---------------
-
-# scheduler_events = {
-# 	"all": [
-# 		"hr_photo_checkin.tasks.all"
-# 	],
-# 	"daily": [
-# 		"hr_photo_checkin.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"hr_photo_checkin.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"hr_photo_checkin.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"hr_photo_checkin.tasks.monthly"
-# 	],
-# }
-
-# Testing
-# -------
-
-# before_tests = "hr_photo_checkin.install.before_tests"
-
-# Extend DocType Class
-# ------------------------------
-#
-# Specify custom mixins to extend the standard doctype controller.
-# extend_doctype_class = {
-# 	"Task": "hr_photo_checkin.custom.task.CustomTaskMixin"
-# }
-
-# Overriding Methods
-# ------------------------------
-#
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "hr_photo_checkin.event.get_events"
-# }
-#
-# each overriding function accepts a `data` argument;
-# generated from the base implementation of the doctype dashboard,
-# along with any modifications made in other Frappe apps
-# override_doctype_dashboards = {
-# 	"Task": "hr_photo_checkin.task.get_dashboard_data"
-# }
-
-# exempt linked doctypes from being automatically cancelled
-#
-# auto_cancel_exempted_doctypes = ["Auto Repeat"]
-
-# Ignore links to specified DocTypes when deleting documents
-# -----------------------------------------------------------
-
-# ignore_links_on_delete = ["Communication", "ToDo"]
-
-# Request Events
-# ----------------
-# before_request = ["hr_photo_checkin.utils.before_request"]
-# after_request = ["hr_photo_checkin.utils.after_request"]
-
-# Job Events
-# ----------
-# before_job = ["hr_photo_checkin.utils.before_job"]
-# after_job = ["hr_photo_checkin.utils.after_job"]
-
-# User Data Protection
-# --------------------
-
-# user_data_fields = [
-# 	{
-# 		"doctype": "{doctype_1}",
-# 		"filter_by": "{filter_by}",
-# 		"redact_fields": ["{field_1}", "{field_2}"],
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_2}",
-# 		"filter_by": "{filter_by}",
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_3}",
-# 		"strict": False,
-# 	},
-# 	{
-# 		"doctype": "{doctype_4}"
-# 	}
-# ]
-
-# Authentication and authorization
-# --------------------------------
-
-# auth_hooks = [
-# 	"hr_photo_checkin.auth.validate"
-# ]
-
-# Automatically update python controller files with type annotations for this app.
-# export_python_type_annotations = True
-
-# default_log_clearing_doctypes = {
-# 	"Logging DocType Name": 30  # days to retain logs
-# }
-
-# Translation
-# ------------
-# List of apps whose translatable strings should be excluded from this app's translations.
-# ignore_translatable_strings_from = []
+# doctype_js
+#   employee_checkin.js  — mandatory field + photo thumbnail on the form
+#   hr_settings.js       — injects a "Photo Check-in Settings" button into
+#                          the HR Settings form so the user can reach our
+#                          settings page without leaving HR Settings.
+#                          (We cannot add fields to HR Settings directly —
+#                          Frappe v16 blocks Custom Fields on Single DocTypes
+#                          that belong to another app.)
+# ---------------------------------------------------------------------------
+doctype_js = {
+    "Employee Checkin": "public/js/employee_checkin.js",
+    "HR Settings":      "public/js/hr_settings.js",
+}
+doctype_list_js = {
+    "Employee Checkin": "public/js/employee_checkin_list.js",
+}
+ 
 
