@@ -22,7 +22,10 @@ RUN useradd -ms /bin/bash frappe \
       git curl wget vim cron gettext-base \
       mariadb-client \
       libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 libpangocairo-1.0-0 \
-      libffi-dev libssl-dev build-essential python3-dev \
+      libffi-dev libssl-dev build-essential python3-dev pkg-config \
+      libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
+      libpq-dev liblcms2-dev libldap2-dev libmariadb-dev libsasl2-dev \
+      libtiff-dev libwebp-dev libbz2-dev tk8.6-dev rlwrap \
       fontconfig libxrender1 xfonts-75dpi xfonts-base \
  && rm -rf /var/lib/apt/lists/*
 
