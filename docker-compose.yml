@@ -19,6 +19,8 @@ services:
   redis-cache:
     image: redis:7-alpine
     restart: unless-stopped
+    # Doubles as the redis_socketio backend too — see docker-entrypoint.sh.
+    # Frappe no longer needs a 3rd dedicated Redis process for this.
 
   redis-queue:
     image: redis:7-alpine
@@ -44,11 +46,9 @@ services:
       - "8000:8000"
       - "9000:9000"
     volumes:
-      - sites-data:/home/frappe/frappe-bench/sites
-      - logs-data:/home/frappe/frappe-bench/logs
+      - bench-data:/home/frappe/frappe-bench
 
 volumes:
   mariadb-data:
   redis-queue-data:
-  sites-data:
-  logs-data:
+  bench-data:
