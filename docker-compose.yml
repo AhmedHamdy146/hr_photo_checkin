@@ -14,15 +14,21 @@ services:
       REDIS_CACHE: redis:6379
       REDIS_QUEUE: redis:6379
       ADMIN_PASSWORD: admin
+      # Add these for convenience
+      FRAPPE_SITE: frontend
+      SITE_NAME: frontend
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
-      - ./entrypoint.sh:/home/frappe/frappe-bench/entrypoint.sh
+      - ./entrypoint.sh:/home/frappe/frappe-bench/entrypoint.sh:ro
     ports:
       - "8000:8000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      restart: unless-stopped
 
   db:
     image: mariadb:10.6
@@ -42,6 +48,7 @@ services:
 
   redis:
     image: redis:6.2-alpine
+    command: redis-server --appendonly yes
     volumes:
       - redis-data:/data
 

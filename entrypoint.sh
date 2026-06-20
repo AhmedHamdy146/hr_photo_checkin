@@ -36,10 +36,23 @@ if [ ! -d "sites/${SITE_NAME}" ]; then
 
     echo "Site created and apps installed."
 else
-    echo "Site ${SITE_NAME} already exists. Skipping creation."
+    echo "Site ${SITE_NAME} already exists. Running migrate to pick up any app updates..."
+    bench --site "${SITE_NAME}" migrate
 fi
 
 bench use "${SITE_NAME}"
+
+# Build was run with --no-procfile (standard for frappe_docker images), but
+# this image uses `bench start` directly, so generate it now if missing.
+# Strip the redis_cache/redis_queue lines bench adds by default -- this setup
+# runs Redis as separate containers (see docker-compose.yml), and the
+# redis-server binary isn't even installed in this image, so letting bench
+# try to spawn its own would crash the whole process group.
+if [ ! -f "Procfile" ]; then
+    echo "Procfile not found. Generating it..."
+    bench setup procfile
+    sed -i '/^redis_cache:/d; /^redis_queue:/d; /^redis_socketio:/d' Procfile
+fi
 
 echo "Starting bench..."
 exec bench start
