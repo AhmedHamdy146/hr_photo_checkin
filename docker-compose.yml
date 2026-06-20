@@ -1,54 +1,56 @@
 services:
-  mariadb:
-    image: mariadb:11.4
-    restart: unless-stopped
+  backend:
+    build:
+      context: .
+      dockerfile: Containerfile
+      secrets:
+        - apps_json
+    image: hr_photo_checkin:latest
+    entrypoint: ["/home/frappe/frappe-bench/entrypoint.sh"]
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-admin123}
+      DB_HOST: db
+      DB_PORT: "3306"
+      MYSQL_ROOT_PASSWORD: admin
+      REDIS_CACHE: redis:6379
+      REDIS_QUEUE: redis:6379
+      ADMIN_PASSWORD: admin
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+      - logs:/home/frappe/frappe-bench/logs
+      - ./entrypoint.sh:/home/frappe/frappe-bench/entrypoint.sh
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mariadb:10.6
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
       - --skip-character-set-client-handshake
+      - --skip-innodb-read-only-compressed
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - db-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--password=admin"]
       interval: 5s
-      timeout: 5s
       retries: 20
 
-  redis-cache:
-    image: redis:7-alpine
-    restart: unless-stopped
-    # Doubles as the redis_socketio backend too — see docker-entrypoint.sh.
-    # Frappe no longer needs a 3rd dedicated Redis process for this.
-
-  redis-queue:
-    image: redis:7-alpine
-    restart: unless-stopped
+  redis:
+    image: redis:6.2-alpine
     volumes:
-      - redis-queue-data:/data
+      - redis-data:/data
 
-  erp:
-    build: .
-    restart: unless-stopped
-    depends_on:
-      mariadb:
-        condition: service_healthy
-      redis-cache:
-        condition: service_started
-      redis-queue:
-        condition: service_started
-    environment:
-      SITE_NAME: ${SITE_NAME:-localhost}
-      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-admin123}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
-    ports:
-      - "8000:8000"
-      - "9000:9000"
-    volumes:
-      - bench-data:/home/frappe/frappe-bench
+secrets:
+  apps_json:
+    file: ./apps.json
 
 volumes:
-  mariadb-data:
-  redis-queue-data:
-  bench-data:
+  sites:
+  logs:
+  db-data:
+  redis-data:
